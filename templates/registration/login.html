@@ -1,0 +1,58 @@
+{% extends '../models/base.html' %}
+
+{% block PageTitle %}
+Login
+{% endblock %}
+
+{% block content %}
+<div class="bg-main">
+    <div class="container">
+        <div class="createLink">
+            <h1 class="mb-5">Login</h1>
+            {% if form.errors %}
+            <div class="alert alert-danger border" role="alert">
+                Your username and password didn't match. Please try again.
+              </div>
+            {% endif %}
+            {% if next %}
+                {% if user.is_authenticated %}
+                <div class="alert alert-danger border" role="alert">Your account doesn't have access to this page. To proceed,
+                    please login with an account that has access.</div>
+                {% else %}
+                <div class="alert alert-danger border" role="alert">
+                    Please login to see this page.
+                </div>
+                {% endif %}
+            {% endif %}
+
+
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+            
+
+            <label for="username" class="mb-3">Username</label>
+            <div class="input-group flex-nowrap mb-3">
+                <input type="name" id="username" name="username" class="form-control input_createlink" placeholder="Enter your username"/>
+            </div>   
+
+            <label for="password" class="mb-3">Password</label>
+            <div class="input-group flex-nowrap mb-3">
+                <input type="password" name="password" id="password" class="form-control input_createlink" placeholder="Enter your password"/>
+            </div> 
+
+            <input type="hidden" name="next" value="{{ next }}" />
+            <div class="d-flex justify-content-center w-100">
+                <button  type="submit"  class="btn btn_createlink"><i class="fas fa-sign-in-alt me-2"></i> Login</button>
+            </div>
+        </form>
+
+            <div class="d-flex justify-content-center w-100">
+                <a href="{% url 'register' %}" class="btn btn_forget"><i class="fas fa-user-plus me-2"></i> Register</a>
+                <h4>or</h4>
+                <a href="{% url 'password_reset' %}" class="btn btn_forget">Forget password?</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

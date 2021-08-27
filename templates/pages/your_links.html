@@ -1,0 +1,133 @@
+{% extends '../models/base.html' %}
+
+{% block PageTitle %}
+Your links
+{% endblock %}
+
+{% block content %}
+<div class="bg-main">
+  <div class="container">
+    <div class="createLinkover">
+
+      {% if messages %}
+      <div class="alert alert-success border" role="alert">
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+        </div>
+      {% endif %}
+      <div class="row">
+        <div class="col-sm-6">
+          <h1>Shorthen your link</h1>
+        </div>
+        <div class="col-sm-6 text-end">
+          <a class="btn btn_add" href="{% url 'index' %}"><i class="fas fa-plus-circle me-2"></i>Add link</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="">
+  <div class="container">
+    <div class="yourlink_table table-responsive">
+      <table class="table table-hover text-center">
+        <thead>
+          <tr>
+            <th>Link</th>
+            <th>Hash</th>
+            <th>Date</th>
+            <th>seen</th>
+            <th>Operations</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for link in links %}
+
+          <tr>
+            <td>{{ link.url }}</td>
+            <td>{{ link.shorthen_link_id }}</td>
+            <td>{{ link.date|date:"d-m-y H:i" }}</td>
+            <td>{{ link.seen }}</td>
+            <td>
+              <a id="{{link.shorthen_link_id}}" onclick="return copyLink('{{link.shorthen_link_id}}')"
+                class="btn_copy"><i class="fas fa-copy me-2"></i></a>
+              <a href="{% url 'update_link' id=link.id %}" class="btn_update"><i class="fas fa-pen me-2"></i></a>
+              <a href="#box{{link.shorthen_link_id}}" class="btn_delete" data-bs-toggle="modal" role="button"><i
+                  class="fas fa-trash me-2"></i></a>
+              <div class="modal fade" id="box{{link.shorthen_link_id}}" aria-hidden="true"
+                aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalToggleLabel">confirmation box</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      Are you sure to delete this link ({{link.url}})?
+                    </div>
+                    <div class="modal-footer">
+
+                      <a data-bs-dismiss="modal" aria-label="Close" class="btn btn-over1 bg-main"><i class="fas fa-ban"></i> cancel</a>
+                      <a href="{% url 'delete_link' id=link.id %}" class="btn btn-over2 bg-green"><i class="fas fa-trash"></i> Yes, I'am sure</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+    </div>
+    </td>
+    </tr>
+
+
+
+    {% empty %}
+    <div class="alert alert-success border" role="alert">
+      You don't have a links
+    </div>
+    {% endfor %}
+
+    </tbody>
+    </table>
+
+
+    <nav class="w-100">
+      <ul class="pagination d-flex justify-content-center">
+        {% if links.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ links.previous_page_number }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        {% endif %}
+
+
+        {% for i in links.paginator.page_range %}
+          {% if links.number == i %}
+          <li class="page-item"><a class="page-link selected" href="?page={{ i }}">{{ i }}</a></li>
+          {% elif i > links.number|add:'-5' and i < links.number|add:'5' %}
+          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{i}}</a></li>
+          {% endif %}
+
+        {% endfor %}
+
+        {% if links.paginator.num_pages > links.number|add:'4' %}
+          <li class="page-item"><a class="page-link" href="?page={{ links.number|add:'5' }}">&hellip;</a></li>
+        {% endif %}
+
+        {% if links.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ links.next_page_number }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+
+
+  </div>
+</div>
+</div>
+{% load static %}
+<script src="{% static 'app.js' %}"></script>
+
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends '../models/base.html' %}
+
+{% block PageTitle %}
+Home
+{% endblock %}
+
+{% block content %}
+<div class="bg-main">
+    <div class="container">
+        <div class="createLink" >
+
+            <div id="error_message" style="display: none;" class="alert alert-danger border" role="alert">
+                Error in sending data
+              </div>
+
+            <h1>Shorthen your link</h1>
+            <form method="POST">
+                {% csrf_token %}
+            <div class="input-group flex-nowrap">
+                <input id="url" type="url" name="url" {% if link %} value="{{ link.url }}"{% endif %} class="form-control input_createlink" placeholder="Enter URL"/>
+              </div>
+
+              {% if link %}
+              <div class="input-group mt-3">
+                <input  id="url_result_div"  type="text" class="form-control input_createlink" value="{{ link.shorthen_link_id }}" style="border-right: none;">
+                <button class="btn btn_formlink" type="button" id="copy_link" onclick="copyLink('{{ link.shorthen_link_id }}')"><i class="fas fa-copy"></i> copy!</button>
+              </div>
+              {% endif %}
+            <div  class="d-flex justify-content-center w-100"><button id="submit_button" type="submit" class="btn btn_createlink"><i class="fas fa-link"></i> Shorthen</button></div>
+           
+            <div class="d-flex justify-content-center w-100"><a id="url_shorthen_redo"  href="{% url 'index' %}" class="btn btn_createlink"><i class="fas fa-redo"></i> Shorthen agin?</a></div>
+
+    </form>
+        </div>
+    </div>
+</div>
+<div class="bg-whith" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="account_option"><h1 class="text-center">Without Account</h1></div>
+                <div class="account_permetions">
+                    <h3>Shorthen link avillable for <span class="color_warring">1 day</span></h3>
+                    <h3>cannot customize your link</h3>
+                    <h3>cannot view number of visitors of your link</h3>
+                    <h3>cannot update or/and delete your link</h3>
+                    <div class="d-flex justify-content-center w-100">
+                        <a class="btn btn-over2 bg-green" href="{% url 'index' %}"><i class="fas fa-link"></i> Shorthen</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="account_option"><h1 class="text-center">With Account</h1></div>
+                <div class="account_permetions">
+                    <h3>Shorthen link avillable for <span class="color_succus">all times</span></h3>
+                    <h3>can customize your link</h3>
+                    <h3>can view number of visitors of your link</h3>
+                    <h3>can update or/and delete your link</h3>
+                    <div class="d-flex justify-content-center w-100">
+                            <a class="btn btn-over1 bg-main me-2" href="{% url 'register' %}"><i class="fas fa-user-plus me-2"></i>Register</a>
+                            <a class="btn btn-over2 bg-second" href="{% url 'login' %}"><i class="fas fa-sign-in-alt me-2"></i>Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+
+    var url_shorthen_redo = document.getElementById("url_shorthen_redo");
+    url_shorthen_redo.style.display = "none";
+
+    {% if link %}
+
+        var submit_button = document.getElementById("submit_button");
+        submit_button.style.display = "none";
+        url_shorthen_redo.style.display = "block";
+        document.getElementById("url_result_div").value = window.location.origin+"/{{link.shorthen_link_id}}"
+    
+    {% endif %}
+
+    async function copyLink(hash) {
+
+        var btn = document.getElementById('copy_link')
+        navigator.clipboard.writeText(window.location.origin+"/"+hash)
+        btn.innerHTML = '<i class="far fa-copy"></i> Copied!'
+        var millisecondsToWait = 2000;
+        setTimeout(function() {
+            btn.classList = "btn btn_formlink2"
+        }, millisecondsToWait);
+}
+
+</script>
+{% endblock %}

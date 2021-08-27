@@ -1,0 +1,92 @@
+{% extends '../models/base.html' %}
+
+{% block PageTitle %}
+Profile
+{% endblock %}
+
+{% block content %}
+<div class="bg-main">
+    <div class="container">
+        <div class="createLink">
+            <h1 class="mb-5">Your Profile</h1>
+            {% if messages %}
+                            <div class="alert alert-success border" role="alert">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                            </div>
+                    {% endif %}
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2 class="mb-3">Modify your informations</h2>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                          {% for error in form.non_field_errors %}
+
+                          <div class="alert alert-danger border" role="alert">
+                              {{ error }}
+                          </div>
+
+                          {% endfor %}
+                        {% endif %}
+                     
+                        {% for field in form.visible_fields %}
+                        <label class="mb-3">{{ field.label_tag }}</label>
+
+                              {% if field.errors %}
+                                <div class="alert alert-danger border" role="alert">
+                                  {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                  {% endfor %}
+                                </div>
+                              {% endif %}
+                            <div class="input-group flex-nowrap mb-3">
+                              {{ field }}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-flex justify-content-center w-100 mb-5">
+                            <button type="submit" class="btn btn_createlink"><i class="fas fa-user-circle me-2"></i>Change informations</button>
+                        </div>
+
+                    </form>
+                   
+                    
+
+                </div>
+                <div class="col-lg-6">
+
+                    <h2 class="mb-3">Modify your password</h2>
+
+                    <form action="{% url 'password_change' %}" method="post">
+                        {% csrf_token %}
+                    <label for="old" class="mb-3">Old Password:</label>
+                    <div class="input-group flex-nowrap mb-3">
+                        <input type="password" name="old_password" id="old" class="form-control input_createlink"
+                            placeholder="Enter your password" />
+                    </div>
+                    <label for="password" class="mb-3">New Password:</label>
+                    <div class="input-group flex-nowrap mb-3">
+                        <input type="password" name="new_password1" id="password" class="form-control input_createlink"
+                            placeholder="Enter your password" />
+                    </div>
+                    <label for="password2" class="mb-3">Retype your new password:</label>
+                    <div class="input-group flex-nowrap mb-3">
+                        <input type="password" name="new_password2" id="password2" class="form-control input_createlink"
+                            placeholder="Enter your password agin" />
+                            
+                    </div>
+                    <div class="d-flex justify-content-center w-100 mb-3">
+                        <button type="submit" class="btn btn_createlink"><i class="fas fa-key me-2"></i>Change password</button>
+                    </div>
+                </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends '../models/base.html' %}
+
+{% block PageTitle %}
+Modify link
+{% endblock %}
+
+{% block content %}
+<div class="bg-main">
+    <div class="container">
+        <div class="createLink">
+            <h1 class="mb-5">Modify link</h1>
+            <form method="POST">
+                {% csrf_token %}
+            <label for="link" class="mb-3">Link</label>
+            <div class="input-group flex-nowrap mb-3">
+                <input type="url" id="link" name="url" class="form-control input_createlink" value="{{ link.url }}"/>
+            </div>   
+
+            <label for="shorthen" class="mb-3">Shorthen Hash</label>
+            
+            <div class="input-group mb-3">
+                <input type="text" name="shorthen_link_id" id="shorthen" class="form-control input_createlink" value="{{ link.shorthen_link_id }}" style="border-right: none;">
+                <button id="{{link.shorthen_link_id}}" onclick="copyLink('{{link.shorthen_link_id}}')" class="btn btn_formlink" type="button" id="copy_link"><i class="fas fa-copy"></i> copy!</button>
+              </div>
+            
+            <div class="d-flex justify-content-center w-100">
+                <button type="submit" class="btn btn_createlink"><i class="fas fa-sign-in-alt me-2"></i> Modify</button>
+            </div>
+        </form>
+
+        </div>
+    </div>
+</div>
+{% load static %}
+<script src="{% static 'app.js' %}"></script>
+{% endblock %}
