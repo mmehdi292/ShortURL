@@ -7,7 +7,6 @@ from django.core.paginator import Paginator
 import random, string
 from django.contrib.auth.decorators import login_required
 
-
 def hashcode(length=5):
    letters = string.ascii_lowercase
    return ''.join(random.choice(letters) for i in range(length))
